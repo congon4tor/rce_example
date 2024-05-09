@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <style>
+        body,
+        html {
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container h-100">
+        <div class="row mt-5">
+            <div class="col-12 mb-4">
+                <h3 class="text-center">Check if a website is down 💣</h3>
+            </div>
+            <form class="col-6 mx-auto" id="form">
+                <div class=" input-group">
+                    <input name="hostname" id="hostname" type="text" class="form-control" placeholder="Hostname"
+                        aria-label="Hostname" aria-describedby="basic-addon2" required>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit">Check</button>
+                    </div>
+                </div>
+            </form>
+            <div class="col-9 mt-4 mx-auto">
+                <pre id="result"></pre>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+let form = document.getElementById("form");
+let result = document.getElementById("result")
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  let hostname = document.getElementById("hostname")
+
+  if (hostname.value == "") {
+    alert("Missing hostname")
+    return
+  } 
+  var payload = {
+    hostname  : hostname.value 
+  }
+
+  const data = JSON.stringify(payload)
+
+  fetch("/ping",
+  {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: data
+  })
+  .then(function(res){ return res.json() })
+  .then(function(data){
+     result.innerText = JSON.stringify(data) 
+  })
+
+})
+</script>
+
+</html>
